@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCoinsRequest } from "../store/slices/coinsSlice";
 import { clearError } from "../store/slices/coinsSlice";
@@ -7,6 +7,7 @@ import Loader from "./Loader";
 import ErrorMessage from "./ErrorMessage";
 import CoinCard from "./CoinCard";
 import Header from "./Header";
+import { toast } from "react-toastify";
 
 const styles = {
   container: {
@@ -105,9 +106,18 @@ const Dashboard: React.FC = () => {
   const { coins, loading, error } = useSelector(
     (state: RootState) => state.coins
   );
+  const isFirstLoad = useRef(true);
 
   useEffect(() => {
     dispatch(fetchCoinsRequest());
+    isFirstLoad.current = false;
+    const interval = setInterval(() => {
+      dispatch(fetchCoinsRequest());
+      if (!isFirstLoad.current) {
+        toast.success("Data refreshed!");
+      }
+    }, 60000);
+    return () => clearInterval(interval);
   }, [dispatch]);
 
   const handleRefresh = () => {

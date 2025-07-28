@@ -6,6 +6,8 @@ import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
 import Portfolio from "./components/Portfolio";
 import { loadPortfolio } from "./store/slices/portfolioSlice";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const PrivateRoute: React.FC<{ children: React.ReactElement }> = ({
   children,
@@ -32,6 +34,7 @@ const App: React.FC = () => {
 
   return (
     <BrowserRouter>
+      <ToastContainer position="top-right" autoClose={3000} />
       <Routes>
         <Route
           path="/login"
